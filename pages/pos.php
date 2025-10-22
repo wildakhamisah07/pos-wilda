@@ -1,21 +1,21 @@
 <?php
 // require_once 'config/koneksi.php';
-$q_products = mysqli_query($koneksi, "SELECT p.*,c.category_name AS c_name FROM products AS p LEFT JOIN categories AS c ON p.category_id= c.id ORDER BY p.id DESC");
-$products = mysqli_fetch_all($q_products, MYSQLI_ASSOC);
+$query = mysqli_query($koneksi, "SELECT *FROM orders ORDER BY id DESC");
+$rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
 
 
 
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
 
-    $s_photo = mysqli_query($koneksi, "SELECT product_photo FROM products WHERE id=$id");
+    $s_photo = mysqli_query($koneksi, "SELECT product_photo FROM row WHERE id=$id");
     $row = mysqli_fetch_assoc($s_photo);
     $filePath = $row['product_photo'];
 
     if (file_exists($filePath)) {
         unlink($filePath);
     }
-    $delete = mysqli_query($koneksi, "DELETE FROM products WHERE id=$id");
+    $delete = mysqli_query($koneksi, "DELETE FROM row WHERE id=$id");
     if ($delete) {
         header("location:?page=product");
     }
@@ -38,29 +38,30 @@ if (isset($_GET['delete'])) {
                 <div class="card-header">
                     <h3 class="card-title">Data Products</h3>
                     <div class="card-body">
-                        <div align='d-flex justify-content-end p-2'>
-                            <a href="?page=tambah-product" class="btn btn-primary">Tambah</a>
+                        <div class='d-flex justify-content-end p-2'>
+                            <a href="pos/add-pos.php" class="btn btn-primary">Add POS</a>
                         </div>
                         <table class="table table-bordered">
                             <br>
                             <tr>
                                 <th>No</th>
-                                <th>Category Name</th>
-                                <th>Product Name</th>
-                                <th>Photo</th>
-                                <th>Price</th>
+                                <th>Order Code</th>
+                                <th>Order Date</th>
+                                <th>Order Amount</th>
+                                <th>Order Change</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             <?php
-                            foreach ($products as $key => $v) {
+                            foreach ($rows as $key => $v) {
                             ?> <tr>
                                     <td><?php echo $key + 1 ?></td>
-                                    <td><?php echo $v['c_name'] ?></td>
-                                    <td><?php echo $v['product_name'] ?></td>
-                                    <td>
-                                        <img src="<?php echo $v['product_photo'] ?>" width="115" alt="">
-                                    </td>
-                                    <td>Rp. <?php echo number_format($v['product_price'], 2, ',', '.') ?></td>
+                                    <td><?php echo $v['order_code'] ?></td>
+                                    <td><?php echo $v['order_date'] ?></td>
+                                    <td><?php echo $v['order_amount'] ?></td>
+                                    <td><?php echo $v['order_change'] ?></td>
+                                    <td><?php echo $v['order_status'] ?></td>
+
                                     <td>
                                         <a href="?page=tambah-product&edit=<?php echo $v['id'] ?>" class="btn btn-success btn-sm">
                                             <i class="bi bi-pencil "></i>
