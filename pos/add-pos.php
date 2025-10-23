@@ -1,3 +1,17 @@
+<?php
+include '../config/koneksi.php';
+//lebih dr 1
+$queryCat = mysqli_query($koneksi, "SELECT * FROM categories");
+$fetchCats = mysqli_fetch_all($queryCat, MYSQLI_ASSOC);
+
+//queryproduct
+$queryProducts = mysqli_query($koneksi, "SELECT c.category_name,
+p.* FROM products p LEFT JOIN categories c ON c.id = p.category_id");
+$fetchProducts = mysqli_fetch_all($queryProducts, MYSQLI_ASSOC);
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,169 +26,33 @@
 </head>
 
 <body>
-
+    <div id="card">
+        <!-- <h3>Nama Product</h3>
+        <p>Description Product</p> -->
+    </div>
     <!-- container-fluid -->
     <div class="container-fluid container-pos">
         <div class="row h-100">
             <div class="col-md-7 product-section">
                 <div class="mb-4">
-                    <h4 class="mb-3">
+                    <h4 class="mb-3" id="product-title">
                         <i class="fas fa-store"></i>
                         Product
                     </h4>
                     <input type="text" id="searchProduct" class="form--control search-box" placeholder="Find Product...">
                 </div>
-                <div class="mb-4">
-                    <button class="btn btn-primary category-btn active">All menu</button>
-                    <button class="btn btn-outline-primary category-btn ">Food</button>
+
+                <div class="mb-5">
+                    <button class="btn btn-primary category-btn active" onclick="filterCategory('all',this)">All menu</button>
+                    <?php foreach ($fetchCats as $cat): ?>
+                        <button class="btn btn-outline-primary category-btn" onclick="filterCategory('<?php echo $cat['category_name'] ?>',this)"><?php echo $cat['category_name'] ?></button>
+                        <!-- this = penganti button utk diriny sendiri -->
+                    <?php endforeach ?>
                     <button class="btn btn-outline-primary category-btn ">Drink</button>
                     <button class="btn btn-outline-primary category-btn ">Snack</button>
                 </div>
                 <div class="row" id="productGrid">
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/mie 1.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Makanan</span>
-                                <h6 class="card-title mt-2 mb-2">Mie Bangladesh</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 25.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/rendang.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Makanan</span>
-                                <h6 class="card-title mt-2 mb-2">Rendang</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 35.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/Asal_usul_gudeg.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Makanan</span>
-                                <h6 class="card-title mt-2 mb-2">Gudeg</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 30.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/matcha.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Minuman</span>
-                                <h6 class="card-title mt-2 mb-2">Matcha</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 15.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/red velvet.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Makanan</span>
-                                <h6 class="card-title mt-2 mb-2">Red Velvet</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 15.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/coklat.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Minuman</span>
-                                <h6 class="card-title mt-2 mb-2">coklat</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 18.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/jus mangga.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Minuman</span>
-                                <h6 class="card-title mt-2 mb-2">Jus Mangga</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 18.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/airline.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Minuman</span>
-                                <h6 class="card-title mt-2 mb-2">Ariline</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 18.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/semangka.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Minuman</span>
-                                <h6 class="card-title mt-2 mb-2">Semangka Juice</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 18.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/kepiting.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Makanan</span>
-                                <h6 class="card-title mt-2 mb-2">Kepiting Saus Padang</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 58.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/burgerking.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Makanan</span>
-                                <h6 class="card-title mt-2 mb-2">Burger King</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 30.000,-</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card product-card">
-                            <div class="product-img">
-                                <img src="../assets/img/seblak.jpg" alt="" width="100%">
-                            </div>
-                            <div class="card-body">
-                                <span class="badge bg-secondary badge-category">Makanan</span>
-                                <h6 class="card-title mt-2 mb-2">Seblak</h6>
-                                <p class="card-text text-primary fw-bold">Rp. 10.000,-</p>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div class="col-md-5 cart-section">
@@ -229,78 +107,10 @@
         crossorigin="anonymous"></script>
 
     <script>
-        // javascript variable : let,var, const
-        // php variable : $, define, const
-
-        let nama = "Wilda Khamisah";
-        var name = "Tedy Pratama P";
-        const fullname = "arza";
-        //const sifatnya tetap , tidak berubah nilai
-
-        //echo jvsc 
-        // console.log(name); // ini yg sering d jvsc
-        //ini kalau menampilkan 2 objek sekaligus
-        // console.log({
-        //     "name": name,
-        //     "fullname": fullname
-        // });
-        // 
-
-        //operator
-        let angka1 = 10;
-        let angka2 = 20;
-        console.log(angka1 + angka2);
-        console.log(angka1 - angka2);
-        console.log(angka1 / angka2);
-        console.log(angka1 * angka2);
-        console.log(angka1 % angka2);
-        console.log(angka1 ** angka2);
-
-        //operator penuganasan
-        let x = 10;
-        x += 5; //15
-        console.log(x);
-
-        //operator pembandingan
-        // >, <, =, ===, !==
-        let a = 1;
-        let b = 1;
-        if (a === b) {
-            console.log("ya")
-        } else {
-            console.log("tidak");
-        }
-        // a = 2;
-        // b = 1;
-        console.log(a > b)
-        console.log(a < b)
-
-
-        //operator logika
-        //&&, AND, OR, ||, ! =Not
-        let umur = 20;
-        let punySim = true;
-        if (umur >= 17 && punySim) {
-            console.log("boleh balapan");
-        } else {
-            console.log("tidak boleh balapan");
-        }
-
-        //array = sebuah tipe data yang bisa memiliki nilainya lebih dari 1
-        let buah = ['pisang', 'salak', 'semangka'];
-        //   0         1        2
-        console.log("buah dikeranjang", buah);
-        console.log("saya mau buah:", buah[0]);
-        buah[1] = "nanas";
-        console.log("buah baru:", buah);
-        console.log("saya mau buah:", buah[2]);
-        //menambahkan buah
-        buah.push('sirsak');
-        console.log("buah", buah);
-        //menghapus index terakhir
-        buah.pop();
-        console.log("buah", buah);
+        const products = <?php echo json_encode(($fetchProducts)) ?>
     </script>
+
+    <script src="../assets/js/wilda.js"></script>
 </body>
 
 </html>
